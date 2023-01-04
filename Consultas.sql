@@ -244,3 +244,116 @@ SELECT nombre,
 FROM producto
 WHERE precio >= 180
 ORDER BY precio DESC, nombre ASC
+
+								/***CONSULTAS RESUMEN***/
+/*1.Calcula el número total de productos que hay en la tabla productos*/
+SELECT COUNT(*) 
+FROM producto
+
+/*2.Calcula el número total de fabricantes que hay en la tabla fabricante.*/
+SELECT COUNT(*)
+FROM fabricante
+
+/*3. Calcula el número de valores distintos de identificador de fabricante aparecen en la tabla productos.*/
+SELECT COUNT(*) FROM 
+	(
+	SELECT DISTINCT codigo_fabricante 
+	FROM fabricante AS fab
+	INNER JOIN producto AS prod
+	ON prod.codigo_fabricante = fab.codigo
+	) subConsulta 
+
+/*4.Calcula la media del precio de todos los productos.*/
+SELECT AVG(ALL precio) FROM producto
+
+/*5.Calcula el precio más barato de todos los productos.*/
+SELECT MIN(precio) FROM producto
+
+/*6.Calcula el precio más caro de todos los productos. */
+SELECT MAX(precio) FROM producto
+
+/*7.Lista el nombre y el precio del producto más barato. */
+SELECT TOP(1) nombre,
+		precio
+FROM producto
+ORDER BY precio ASC
+
+/*8.Lista el nombre y el precio del producto más caro.*/
+SELECT TOP(1)nombre,
+		precio
+FROM producto
+ORDER BY precio ASC
+
+/*9.Calcula la suma de los precios de todos los productos.*/
+SELECT  SUM(precio)
+FROM producto
+
+/*10.Calcula el número de productos que tiene el fabricante Asus.*/
+SELECT COUNT(*)
+FROM producto AS prod
+INNER JOIN fabricante AS fab
+ON fab.codigo = prod.codigo_fabricante
+WHERE fab.nombre = 'Asus'
+
+/*11.Calcula la media del precio de todos los productos del fabricante Asus.*/
+SELECT AVG(precio)
+FROM producto AS prod
+INNER JOIN fabricante AS fab
+ON prod.codigo_fabricante = fab.codigo
+WHERE fab.nombre = 'Asus'
+
+/*12.Calcula el precio más barato de todos los productos del fabricante Asus.*/
+SELECT top 1 *
+FROM producto AS prod 
+INNER JOIN fabricante AS fab
+ON prod.codigo_fabricante = fab.codigo
+WHERE fab.nombre = 'Asus'
+ORDER BY prod.precio ASC
+
+/*13.Calcula el precio más caro de todos los productos del fabricante Asus*/
+SELECT TOP 1 *
+FROM producto AS prod
+INNER JOIN fabricante AS fab
+ON prod.codigo_fabricante = fab.codigo
+WHERE fab.nombre = 'Asus'
+ORDER BY prod.precio DESC
+
+/*14.Calcula la suma de todos los productos del fabricante Asus*/
+SELECT SUM(precio)
+FROM producto AS prod
+INNER JOIN fabricante AS fab
+ON prod.codigo_fabricante = fab.codigo
+WHERE fab.nombre = 'Asus'
+
+/*15.Muestra el precio máximo, precio mínimo, precio medio y el número total de productos que tiene el fabricante Crucial*/
+SELECT MAX(precio) AS [precio Maximo],
+		MIN(precio) AS [precio Minimo], 
+		AVG(precio) AS [precio Medio], 
+		COUNT(precio) AS total
+FROM producto AS prod
+INNER JOIN fabricante AS fab
+ON prod.codigo_fabricante = fab.codigo
+WHERE fab.nombre = 'crucial'
+
+/*16.Muestra el número total de productos que tiene cada uno de los fabricantes. 
+	El listado también debe incluir los fabricantes que no tienen ningún producto. 
+	El resultado mostrará dos columnas, una con el nombre del fabricante y otra con el número de productos que tiene. 
+	Ordene el resultado descendentemente por el número de productos.*/
+SELECT fab.nombre AS [nombre fabricante], 
+		COUNT(prod.codigo) AS [cantidad producto]
+FROM fabricante AS fab
+JOIN producto AS prod
+ON prod.codigo_fabricante = fab.codigo
+GROUP BY fab.nombre
+ORDER BY [cantidad producto] DESC
+
+
+
+
+
+
+
+
+
+/*17.Muestra el precio máximo, precio mínimo y precio medio de los productos de cada uno de los fabricantes. 
+	El resultado mostrará el nombre del fabricante junto con los datos que se solicitan.*/

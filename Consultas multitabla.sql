@@ -119,17 +119,28 @@ ORDER BY prod.precio DESC,
 SELECT fab.codigo,
 		fab.nombre
 FROM fabricante AS fab
-RIGHT JOIN producto AS prod
-ON prod.codigo_fabricante = fab.codigo
+WHERE EXISTS
+	(SELECT NULL 
+	 FROM producto
+	 WHERE codigo_fabricante = fab.codigo)
+--INNER JOIN producto AS prod
+--ON prod.codigo_fabricante = fab.codigo
 
-SELECT fab.codigo,
-		fab.nombre
+                              /***CONSULTAS MULTITABLA (COMPOSICIÓN EXTERNA)***/
+
+
+/*1.Devuelve un listado de todos los fabricantes que existen en la base de datos, junto con los productos que tiene cada uno de ellos. 
+	El listado deberá mostrar también aquellos fabricantes que no tienen productos asociados.*/
+SELECT *
+FROM fabricante AS fab
+LEFT JOIN producto AS prod
+ON fab.codigo = prod.codigo_fabricante
+
+/*2.Devuelve un listado donde sólo aparezcan aquellos fabricantes que no tienen ningún producto asociado.*/
+SELECT  *
 FROM fabricante AS fab
 LEFT JOIN producto AS prod
 ON prod.codigo_fabricante = fab.codigo
+WHERE prod.codigo_fabricante IS NULL
 
-SELECT fab.codigo,
-		fab.nombre
-FROM fabricante AS fab
-INNER JOIN producto AS prod
-ON prod.codigo_fabricante = fab.codigo
+/*3.¿Pueden existir productos que no estén relacionados con un fabricante? Justifique su respuesta.*/
