@@ -347,13 +347,62 @@ ON prod.codigo_fabricante = fab.codigo
 GROUP BY fab.nombre
 ORDER BY [cantidad producto] DESC
 
-
-
-
-
-
-
-
-
 /*17.Muestra el precio máximo, precio mínimo y precio medio de los productos de cada uno de los fabricantes. 
 	El resultado mostrará el nombre del fabricante junto con los datos que se solicitan.*/
+SELECT MAX(prod.precio) AS [precio maximo], 
+		MIN(prod.precio) AS [precio minimo],
+		AVG(prod.precio) AS [precio medio],
+		fab.nombre AS [nombre fabricante]
+FROM producto AS prod
+INNER JOIN fabricante AS fab
+ON fab.codigo = prod.codigo_fabricante
+GROUP BY fab.nombre
+
+/*18.Muestra el precio máximo, precio mínimo, precio medio y el número total de productos de los fabricantes que tienen 
+	 un precio medio superior a 200€. No es necesario mostrar el nombre del fabricante, con el identificador del fabricante 
+	 es suficiente.*/
+SELECT MAX(prod.precio) AS [precio maximo],
+		MIN(prod.precio) AS [precio minimo],
+		AVG(prod.precio) AS [precio medio],
+		COUNT(fab.codigo) AS [cantidad producto],
+		fab.codigo
+FROM producto AS prod
+LEFT JOIN fabricante AS fab
+ON fab.codigo = prod.codigo_fabricante
+GROUP BY fab.codigo
+HAVING AVG(prod.precio) > 200
+
+/*19.Muestra el nombre de cada fabricante, junto con el precio máximo, precio mínimo, precio medio y el número total de 
+	productos de los fabricantes que tienen un precio medio superior a 200€. Es necesario mostrar el nombre del fabricante.*/
+SELECT fab.nombre,
+		MAX(precio),
+		MIN(precio),
+		AVG(precio),
+		COUNT(precio)
+FROM producto 
+LEFT JOIN fabricante AS fab
+ON producto.codigo_fabricante = fab.codigo
+GROUP BY fab.nombre
+HAVING AVG(precio) > 200
+
+/*20.Calcula el número de productos que tienen un precio mayor o igual a 180€.*/
+SELECT COUNT(codigo)
+FROM producto
+WHERE precio >= 180
+
+/*21.Calcula el número de productos que tiene cada fabricante con un precio mayor o igual a 180€.*/
+SELECT COUNT(prod.codigo)
+FROM producto AS prod
+LEFT JOIN fabricante AS fab
+ON prod.codigo_fabricante = fab.codigo
+GROUP BY fab.nombre
+
+
+
+
+/*22.Lista el precio medio los productos de cada fabricante, mostrando solamente el identificador del fabricante.*/
+/*23.Lista el precio medio los productos de cada fabricante, mostrando solamente el nombre del fabricante.*/
+/*24.Lista los nombres de los fabricantes cuyos productos tienen un precio medio mayor o igual a 150€.*/
+/*25.Devuelve un listado con los nombres de los fabricantes que tienen 2 o más productos.*/
+/*26.Devuelve un listado con los nombres de los fabricantes y el número de productos que tiene cada uno con un precio superior 
+	o igual a 220 €. No es necesario mostrar el nombre de los fabricantes que no tienen productos que cumplan la condición.*/
